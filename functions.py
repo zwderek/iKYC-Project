@@ -49,6 +49,7 @@ class Util:
             if el is not None:
                 original[elidx] = el
         return tuple(original)
+    
 
 class ReturnStatus:
     """
@@ -127,7 +128,7 @@ def read_user_by_name(name: str):
     return cursor.fetchall()
 
 # 1.2 Create User
-def create_user(name: str, welcome_msg: str, pwd: str) -> int:
+def create_user(name: str, pwd: str) -> int:
     """
     Creates user
     Args:
@@ -150,9 +151,9 @@ def create_user(name: str, welcome_msg: str, pwd: str) -> int:
     try:
         cursor.execute("SELECT MAX(customer_id) FROM Customer;")
         customer_id = cursor.fetchone()[0] + 1
-        entry = (customer_id, name, welcome_msg, pwd)
+        entry = (customer_id, name, pwd)
         entry = Util.fitArray(entry)
-        sql = "INSERT INTO Customer VALUES ({}, {}, {}, {})".format(*entry)
+        sql = "INSERT INTO Customer VALUES ({}, {}, {})".format(*entry)
         cursor.execute(sql)
         myconn.commit()
     except BaseException:
@@ -160,39 +161,40 @@ def create_user(name: str, welcome_msg: str, pwd: str) -> int:
     return ReturnStatus.OK
 
 
-# 2 Customized Welcome Information
-def set_welcome_msg(customer_id: int, new_msg: str) -> int:
-    """
-    Set the welcome message for a user
+# # 2 Customized Welcome Information
+# def set_welcome_msg(customer_id: int, new_msg: str) -> int:
+#     """
+#     Set the welcome message for a user
 
-    Keyword Argument:
-    customer_id -- int, the id of customer want to change the welcome message
-    new_msg -- str, the new welcome message to set
+#     Keyword Argument:
+#     customer_id -- int, the id of customer want to change the welcome message
+#     new_msg -- str, the new welcome message to set
 
-    Return True if set success, False if fails
-    """
-    try:
-        sql = "UPDATE Customer SET welcome_msg = '{}' WHERE customer_id = '{}';".format(new_msg, customer_id)
-        cursor.execute(sql)
-    except BaseException:
-        return ReturnStatus.DATABASE_ERROR
-    return ReturnStatus.OK
+#     Return True if set success, False if fails
+#     """
+#     try:
+#         sql = "UPDATE Customer SET welcome_msg = '{}' WHERE customer_id = '{}';".format(new_msg, customer_id)
+#         cursor.execute(sql)
+#     except BaseException:
+#         return ReturnStatus.DATABASE_ERROR
+#     return ReturnStatus.OK
 
 # A user profile
 # A.1 Read User Profile
 def read_profile(customer_id: int):
     """
     :param customer_id:
-    :return: tuple (name, gender, birthday, email, pic, is_public)
+    :return: tuple (name, gender, birthday, email, pic, welcome_msg, is_public)
     name: name of user
     gender: 0 M, 1 F, 2 Other
     birthday:
     email:
     pic: profile pic file path
+    welcome_msg: welcome message
     is_public: whether profile is open to other users (tentative function). 0 no, 1 yes
     """
     try:
-        sql = """SELECT name, gender, DATE_FORMAT(birthday, '%Y-%m-%d'), email, pic, is_public
+        sql = """SELECT name, gender, DATE_FORMAT(birthday, '%Y-%m-%d'), email, pic, welcome_msg, is_public
                 FROM Profile
                 WHERE customer_id = '{}';""".format(customer_id)
         cursor.execute(sql)
@@ -201,7 +203,7 @@ def read_profile(customer_id: int):
     return cursor.fetchone()
 
 # A.2 Update User Profile
-def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> int:
+def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, welcome_msg:str=None, is_public:bool=None) -> int:
     """
     Args:
         customer_id:
@@ -210,6 +212,7 @@ def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
         birthday: in '%Y-%m-%d' format
         email:
         pic: file path
+        welcome_msg: welcome message
         is_public: 0 no, 1 yes
 
     Returns: True on success, False on failure
@@ -218,12 +221,12 @@ def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
     original = read_profile(customer_id)
     if original is None:
         return False
-    update = [name, gender, birthday, email, pic, is_public]
+    update = [name, gender, birthday, email, pic, welcome_msg, is_public]
     original = Util.updateArray(original, update)
     original = Util.fitArray(original)
     try:
         sql = """
-        UPDATE Profile SET `name` = {}, `gender` = {}, `birthday` = {}, `email` = {}, `pic` = {}, `is_public` = {} WHERE (`profile_id` = {});
+        UPDATE Profile SET `name` = {}, `gender` = {}, `birthday` = {}, `email` = {}, `pic` = {}, `welcome_msg` = {}, `is_public` = {} WHERE (`profile_id` = {});
         """.format(*original, customer_id)
         cursor.execute(sql)
         myconn.commit()
@@ -243,7 +246,7 @@ def update_profile_pic(customer_id: int, pic:str=None) -> int:
 
     """
     return update_profile(customer_id,
-                          name=None, gender=None, birthday=None, email=None, pic=pic, is_public=None)
+                          name=None, gender=None, birthday=None, email=None, pic=pic, welcome_msg=None, is_public=None)
 
 # A.4 Update Profile Publicness
 def update_profile_public(customer_id: int, is_public: int=None) -> int:
@@ -256,10 +259,10 @@ def update_profile_public(customer_id: int, is_public: int=None) -> int:
 
     """
     return update_profile(customer_id,
-                          name=None, gender=None, birthday=None, email=None, pic=None, is_public=is_public)
+                          name=None, gender=None, birthday=None, email=None, pic=None, welcome_msg=None, is_public=is_public)
 
 # A.5 Create User Profile
-def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> int:
+def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, welcome_msg:str=None, is_public:bool=None) -> int:
     """
     Create user profile
     Args:
@@ -276,9 +279,9 @@ def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
     try:
         cursor.execute("SELECT MAX(profile_id) FROM Profile;")
         profile_id = cursor.fetchone()[0] + 1
-        entry = (profile_id, customer_id, name, gender, birthday, email, pic, is_public)
+        entry = (profile_id, customer_id, name, gender, birthday, email, pic, welcome_msg, is_public)
         entry = Util.fitArray(entry)
-        sql = "INSERT INTO Customer (`profile_id`, `customer_id`, `name`, `gender`, `birthday`, `email`, `pic`, `is_public`) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(*entry)
+        sql = "INSERT INTO Profile (`profile_id`, `customer_id`, `name`, `gender`, `birthday`, `email`, `pic`, `welcome_msg`, `is_public`) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {});".format(*entry)
         cursor.execute(sql)
         myconn.commit()
     except BaseException:
@@ -286,10 +289,9 @@ def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
     return ReturnStatus.OK
 
 
-
 # 3 View Account Information
 def get_account_info(customer_id: int) -> list:
-    sql = """SELECT type, currency, account_id, balance FROM Account WHERE customer_id = {};""".format(customer_id);
+    sql = """SELECT type, currency, account_id, balance FROM Account WHERE customer_id = {};""".format(customer_id)
     cursor.execute(sql)
     return cursor.fetchall()
 
