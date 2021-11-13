@@ -49,9 +49,30 @@ class Util:
             if el is not None:
                 original[elidx] = el
         return tuple(original)
-                    
 
+class ReturnStatus:
+    """
+    For easy of info transmit between front and back end
+    """
+    OK = 0
+    DATABASE_ERROR = -1
+    DATA_NOT_UNIQUE = -2
 
+    @staticmethod
+    def statusToNarration(status):
+        if status == ReturnStatus.OK:
+            return "OK"
+        elif status == ReturnStatus.DATABASE_ERROR:
+            return "Database Error! "
+        elif status == ReturnStatus.DATA_NOT_UNIQUE:
+            return "Data submitted is not unique! "
+
+    @staticmethod
+    def isAStatus(content):
+        if content is int:
+            return True
+        else:
+            return False
 
 # 0 Create database connection
 myconn = mysql.connector.connect(host="localhost", user="root", database="facerecognition")
@@ -82,7 +103,7 @@ def display_login_info(customer_id: int):
         ORDER BY l.login_date DESC, l.login_time DESC;""".format(customer_id)
         cursor.execute(sql)
     except BaseException:
-        return None
+        return ReturnStatus.DATABASE_ERROR
     return cursor.fetchone()
 
 # 1.1 Search user by username
@@ -102,11 +123,11 @@ def read_user_by_name(name: str):
         """.format(name)
         cursor.execute(sql)
     except BaseException:
-        return None
+        return ReturnStatus.DATABASE_ERROR
     return cursor.fetchall()
 
 # 1.2 Create User
-def create_user(name: str, welcome_msg: str, pwd: str) -> bool:
+def create_user(name: str, welcome_msg: str, pwd: str) -> int:
     """
     Creates user
     Args:
@@ -117,6 +138,16 @@ def create_user(name: str, welcome_msg: str, pwd: str) -> bool:
         True on success, False on failure
     """
     try:
+        unique_check_sql = "SELECT name FROM Customer WHERE name='{}';".format(name)
+        cursor.execute(unique_check_sql)
+        result = cursor.fetchall()
+        if result is None:
+            return ReturnStatus.DATABASE_ERROR
+        elif len(result) != 0:
+            return ReturnStatus.DATA_NOT_UNIQUE
+    except BaseException:
+        return ReturnStatus.DATABASE_ERROR
+    try:
         cursor.execute("SELECT MAX(customer_id) FROM Customer;")
         customer_id = cursor.fetchone()[0] + 1
         entry = (customer_id, name, welcome_msg, pwd)
@@ -125,12 +156,12 @@ def create_user(name: str, welcome_msg: str, pwd: str) -> bool:
         cursor.execute(sql)
         myconn.commit()
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 
 # 2 Customized Welcome Information
-def set_welcome_msg(customer_id: int, new_msg: str) -> bool:
+def set_welcome_msg(customer_id: int, new_msg: str) -> int:
     """
     Set the welcome message for a user
 
@@ -144,8 +175,8 @@ def set_welcome_msg(customer_id: int, new_msg: str) -> bool:
         sql = "UPDATE Customer SET welcome_msg = '{}' WHERE customer_id = '{}';".format(new_msg, customer_id)
         cursor.execute(sql)
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 # A user profile
 # A.1 Read User Profile
@@ -166,11 +197,11 @@ def read_profile(customer_id: int):
                 WHERE customer_id = '{}';""".format(customer_id)
         cursor.execute(sql)
     except BaseException:
-        return None
+        return ReturnStatus.DATABASE_ERROR
     return cursor.fetchone()
 
 # A.2 Update User Profile
-def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> bool:
+def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> int:
     """
     Args:
         customer_id:
@@ -197,12 +228,12 @@ def update_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
         cursor.execute(sql)
         myconn.commit()
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 
 # A.3 Update User Pic
-def update_profile_pic(customer_id: int, pic:str=None) -> bool:
+def update_profile_pic(customer_id: int, pic:str=None) -> int:
     """
     Args:
         customer_id:
@@ -215,7 +246,7 @@ def update_profile_pic(customer_id: int, pic:str=None) -> bool:
                           name=None, gender=None, birthday=None, email=None, pic=pic, is_public=None)
 
 # A.4 Update Profile Publicness
-def update_profile_public(customer_id: int, is_public: int=None) -> bool:
+def update_profile_public(customer_id: int, is_public: int=None) -> int:
     """
     Args:
         customer_id:
@@ -228,7 +259,7 @@ def update_profile_public(customer_id: int, is_public: int=None) -> bool:
                           name=None, gender=None, birthday=None, email=None, pic=None, is_public=is_public)
 
 # A.5 Create User Profile
-def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> bool:
+def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, is_public:bool=None) -> int:
     """
     Create user profile
     Args:
@@ -251,8 +282,8 @@ def create_profile(customer_id: int, name:str=None, gender:str=None, birthday:st
         cursor.execute(sql)
         myconn.commit()
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 
 
@@ -280,19 +311,19 @@ time_left: str, time_right: str, amount_low: int, amount_high: int) -> list:
 
 # Additional 1 Create New Account 
 
-def create_account(customer_id: int, type: str, currency: str) -> bool:
+def create_account(customer_id: int, type: str, currency: str) -> int:
     try:
         cursor.execute("SELECT MAX(account_id) FROM Account;")
         account_id = cursor.fetchone()[0] + 1
         sql = "INSERT INTO Account VALUES ({}, '{}', '{}', {}, 0)".format(customer_id, type, currency, account_id)
         cursor.execute(sql)
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 # Additional 2 Delete Account
 
-def delete_account(customer_id: int, account_id: int) -> bool:
+def delete_account(customer_id: int, account_id: int) -> int:
     cursor.execute("SELECT customer_id, balance FROM Account WHERE account_id = {}".format(account_id))
     db_customer_id, balance = cursor.fetchone()
     # Reject Deletion if account not belong to this user or balance is not 0
@@ -301,18 +332,18 @@ def delete_account(customer_id: int, account_id: int) -> bool:
     try:
         cursor.execute("DELETE FROM Account WHERE account_id = {}".format(account_id))
     except BaseException:
-        return False
-    return True
+        return ReturnStatus.DATABASE_ERROR
+    return ReturnStatus.OK
 
 # Additional 2 Make Transaction
 # Return True if transaction are proceeded, False otherwise
-def make_transaction(from_account: int, to_account: int, amount: int) -> bool:
+def make_transaction(from_account: int, to_account: int, amount: int) -> int:
     try:
         # Verify Correctness
         cursor.execute("SELECT balance FROM Account WHERE account_id = {}".format(from_account))
         from_balance = cursor.fetchone()[0]
         if from_balance < amount:
-            return False
+            return ReturnStatus.ACCOUNT_ERROR.AMOUNT_SHORT
         # Update Transaction Infos
         sql = "INSERT INTO Transaction VALUES ({}, CURDATE(), NOW(), {}), ({}, CURDATE(), NOW(), {});".format(from_account, -amount, to_account, amount)
         cursor.execute(sql)
