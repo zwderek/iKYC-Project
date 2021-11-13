@@ -1,15 +1,14 @@
 CREATE TABLE `Customer` (
 `customer_id` int NOT NULL,
 `name` varchar(50) NOT NULL, # can be nick name 
-`welcome_msg` varchar(100) NOT NULL,
 `pwd` varchar(20) NOT NULL, 
 PRIMARY KEY (`customer_id`));
 
 CREATE TABLE `Login` (
   `login_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
-  `login_date` TIME NULL,
-  `login_time` DATE NULL,
+  `login_date` DATE NULL,
+  `login_time` TIME NULL,
   PRIMARY KEY (`login_id`));
   
   CREATE TABLE `Profile` (
@@ -20,6 +19,7 @@ CREATE TABLE `Login` (
   `birthday` date NULL,
   `email` varchar(50) NULL,
   `pic` VARCHAR(200) NULL, 
+  `welcome_msg` varchar(100) NULL,
   `is_public` bool NULL, 
   PRIMARY KEY (`profile_id`));
 
@@ -33,7 +33,8 @@ PRIMARY KEY (`account_id`));
 
 CREATE TABLE `Transaction` (
 `transaction_id` int NOT NULL, 
-`account_id` int NOT NULL,
+`from_account_id` int NOT NULL,
+`to_account_id` int NOT NULL,
 `transaction_date` date NOT NULL,
 `transaction_time` time NOT NULL,
 `amount` int NOT NULL, 
