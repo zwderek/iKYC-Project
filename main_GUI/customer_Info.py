@@ -31,13 +31,13 @@ class Ui_customer_Info(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser.setGeometry(QtCore.QRect(30, 320, 411, 121))
+        self.textBrowser.setGeometry(QtCore.QRect(30, 320, 411, 101))
         self.textBrowser.setObjectName("textBrowser")
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser_2.setGeometry(QtCore.QRect(30, 490, 411, 351))
+        self.textBrowser_2.setGeometry(QtCore.QRect(30, 530, 411, 311))
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(30, 460, 271, 31))
+        self.label_2.setGeometry(QtCore.QRect(30, 500, 271, 31))
         self.label_2.setObjectName("label_2")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.groupBox)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(480, 10, 701, 831))
@@ -45,8 +45,9 @@ class Ui_customer_Info(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-
-
+        self.pushButton = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton.setGeometry(QtCore.QRect(30, 440, 411, 41))
+        self.pushButton.setObjectName("pushButton_4")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -67,7 +68,5 @@ class Ui_customer_Info(object):
 "</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.label_2.setText(_translate("Form", "Login History"))
-
-
-
+        self.pushButton.setText(_translate("Form", "Edit Profile"))
 import pics_ui_rc
