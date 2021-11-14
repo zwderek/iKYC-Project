@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
+#there is a manual change in line 14, which may result in a difference between the file directly gotten from account_Info.ui
 class Ui_account_Info(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
