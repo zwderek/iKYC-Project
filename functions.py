@@ -69,6 +69,8 @@ class Util:
         """
         if input is None:
             return True
+        elif input == "NULL":
+            return True
         elif input == "all":
             return True
         elif Util.isEmpty(input):
@@ -175,7 +177,7 @@ class ReturnStatus:
 class WeConnect:
     def __init__(self) -> None:
         # 0 Create database connection
-        self.myconn = mysql.connector.connect(host="localhost", user="root", database="facerecognition")
+        self.myconn = mysql.connector.connect(host="localhost", user="root", password="tanlihui991228", database="face")
         self.date = datetime.utcnow()
         self.now = datetime.now()
         self.current_time = self.now.strftime("%H:%M:%S")
@@ -186,17 +188,35 @@ class WeConnect:
     # 1 Display Login Information
     def display_login_info(self, customer_id: int):
         """
-        Get the Login Information with Name, Last Login Time, Last Login Date, Welcome Message, in sequence
+        Get the Login Information: customer information and user profile
 
         Keyword Arguments:
         customer_id -- int, id of customer
 
-        Return a Tuple (name, login_time, login_date, welcome_message), query by index. On failure, return None.
+        Return a dictionary 
+        {"customer_and_login": (name, login_time, login_date), "profile": (name, gender, birthday, email, pic, welcome_msg, is_public)}. 
+        On failure, return None.
+        """
+        try:
+            customer_and_login = self.read_customer_and_login(customer_id=customer_id)
+            profile = self.read_profile(customer_id=customer_id)
+        except BaseException:
+            return ReturnStatus.DATABASE_ERROR
+        return {"customer_and_login": customer_and_login, "profile": profile}
+
+    # 1.0 read_customer_and_login
+    def read_customer_and_login(self, customer_id: int):
+        """
+        Get the Login Information with Name, Last Login Time, Last Login Date, in sequence
+
+        Keyword Arguments:
+        customer_id -- int, id of customer
+
+        Return a Tuple (name, login_time, login_date), query by index. On failure, return error status.
         """
         try:
             sql = """SELECT name, TIME_FORMAT(login_time, '%H:%i:%s'), 
-            DATE_FORMAT(login_date, '%Y-%m-%d'), 
-            welcome_msg
+            DATE_FORMAT(login_date, '%Y-%m-%d')
             FROM Customer c LEFT JOIN
             Login l ON l.customer_id = c.customer_id
             WHERE c.customer_id = '{}'
@@ -259,24 +279,31 @@ class WeConnect:
             return ReturnStatus.DATABASE_ERROR
         return ReturnStatus.OK
 
+    # B login history
+    # B.1 history record
+    def create_history(self, customer_id: int, login_date: str=None, login_time: str=None) -> int:
+        """Create login history record
 
-    # # 2 Customized Welcome Information
-    # def set_welcome_msg(customer_id: int, new_msg: str) -> int:
-    #     """
-    #     Set the welcome message for a user
+        Args:
+            customer_id (int): 
+            login_date (str, optional): login date. Defaults to None, then today.
+            login_time (str, optional): login time. Defaults to None, then now.
 
-    #     Keyword Argument:
-    #     customer_id -- int, the id of customer want to change the welcome message
-    #     new_msg -- str, the new welcome message to set
-
-    #     Return True if set success, False if fails
-    #     """
-    #     try:
-    #         sql = "UPDATE Customer SET welcome_msg = '{}' WHERE customer_id = '{}';".format(new_msg, customer_id)
-    #         self.cursor.execute(sql)
-    #     except BaseException:
-    #         return ReturnStatus.DATABASE_ERROR
-    #     return ReturnStatus.OK
+        Returns:
+            int: ReturnStatus
+        """
+        try:
+            self.cursor.execute("SELECT MAX(login_id) FROM Login;")
+            login_id = self.cursor.fetchone()[0] + 1
+            date = Util.fit(login_date) if login_date else 'CURDATE()'
+            time = Util.fit(login_time) if login_time else 'NOW()'
+            entry = (login_id, customer_id, date, time)
+            sql = "INSERT INTO Login VALUES ({}, {}, {}, {})".format(*entry)
+            self.cursor.execute(sql)
+            self.myconn.commit()
+        except BaseException:
+            return ReturnStatus.DATABASE_ERROR
+        return ReturnStatus.OK
 
     # A user profile
     # A.1 Read User Profile
@@ -394,19 +421,6 @@ class WeConnect:
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
-    # # 4 See Detail Transaction
-    # def get_transaction(account_id: int) -> list:
-    #     """[summary]
-
-    #     Args:
-    #         account_id (int): [description]
-
-    #     Returns:
-    #         list: [description]
-    #     """
-    #     self.cursor.execute("SELECT TIME_FORMAT(transaction_time, '%H:%i:%s'), DATE_FORMAT(transaction_date, '%Y-%m-%d'), amount FROM Transaction WHERE account_id = {};".format(account_id))
-    #     return self.cursor.fetchall()
-
     # 5 Search Detail Transaction
     # Support Time Range Selection
     # Support Date Selection and Date Range Selection
@@ -428,7 +442,7 @@ class WeConnect:
             amount_high (int, optional): [description]. Defaults to None.
 
         Returns:
-            list: [description]
+            list: [(from_name, to_name, trans_time, trans_date, amount)]
         """
 
         # prep where build
@@ -458,7 +472,13 @@ class WeConnect:
         
         whereclause = Util.whereBuild(conditions)
         
-        sql = "SELECT TIME_FORMAT(transaction_time, '%H:%i:%s'), DATE_FORMAT(transaction_date, '%Y-%m-%d'), amount FROM Transaction" + whereclause + ";"
+        sql = """SELECT FC.name, TC.name, TIME_FORMAT(transaction_time, '%H:%i:%s'), DATE_FORMAT(transaction_date, '%Y-%m-%d'), amount
+                FROM Transaction T left join
+                Account FA on T.from_account_id = FA.account_id
+                left join Account TA on T.to_account_id = TA.account_id
+                left join Customer FC on FA.customer_id = FC.customer_id
+                left join Customer TC on TA.customer_id = TC.customer_id
+        """ + whereclause + ";"
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
