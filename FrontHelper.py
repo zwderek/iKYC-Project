@@ -56,18 +56,19 @@ class FrontHelper:
             return input.isalnum()
     
     @staticmethod
-    def genderToRepresentation(gender):
+    def genderToString(gender):
         formattedGender = None
         if type(gender) is str:
             try:
                 formattedGender = int(gender)
             except BaseException:
                 return "Error"
-        if gender == 0:
+        formattedGender = gender
+        if formattedGender == 0:
             return "Male"
-        elif gender == 1:
+        elif formattedGender == 1:
             return "Female"
-        elif gender == 2:
+        elif formattedGender == 2:
             return "Others"
         else:
             return "Error"
@@ -95,3 +96,19 @@ class FrontHelper:
             return 1
         else:
             return 0
+
+    @staticmethod
+    def ispublicToString(ispublic) -> str:
+        formattedIspublic = None
+        if type(ispublic) is str:
+            try:
+                formattedIspublic = int(ispublic)
+            except BaseException:
+                return "Error"
+        formattedIspublic = ispublic
+        if formattedIspublic == 0:
+            return "Private"
+        elif formattedIspublic == 1:
+            return "Public"
+        else:
+            return "Error"
