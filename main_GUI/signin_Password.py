@@ -40,7 +40,7 @@ class Ui_signin_Password(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Sign in with password"))
         self.pushButton.setText(_translate("Form", "Sign in"))
         self.label.setText(_translate("Form", "Username"))
         self.label_2.setText(_translate("Form", "Password"))

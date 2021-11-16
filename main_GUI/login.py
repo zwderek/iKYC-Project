@@ -53,7 +53,7 @@ class Ui_login(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "iKYC"))
         self.pushButton.setText(_translate("MainWindow", "Sign in with Face ID"))
         self.pushButton_2.setText(_translate("MainWindow", "Sign in with Password"))
         self.pushButton_3.setText(_translate("MainWindow", "Sign up"))

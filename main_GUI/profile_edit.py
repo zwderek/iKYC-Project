@@ -13,6 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_profile_edit(object):
     def setupUi(self, Form):
+        Form.setWindowTitle("Edit")
         Form.setObjectName("Form")
         Form.resize(852, 827)
         self.groupBox = QtWidgets.QGroupBox(Form)
@@ -69,7 +70,7 @@ class Ui_profile_edit(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Edit"))
         self.label.setText(_translate("Form", "Name"))
         self.label_2.setText(_translate("Form", "Gender"))
         self.label_3.setText(_translate("Form", "Birthday"))
@@ -80,5 +81,5 @@ class Ui_profile_edit(object):
         self.label_5.setText(_translate("Form", "Welcome message"))
         self.comboBox_2.setItemText(0, _translate("Form", "Public"))
         self.comboBox_2.setItemText(1, _translate("Form", "Private"))
-        self.label_6.setText(_translate("Form", "Do you want to set this to be public?"))
+        self.label_6.setText(_translate("Form", "Profile status"))
         self.pushButton.setText(_translate("Form", "Submit"))

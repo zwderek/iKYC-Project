@@ -13,6 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_customer_Info(object):
     def setupUi(self, Form):
+        Form.setWindowTitle("Customer")
         Form.setObjectName("Form")
         Form.resize(1219, 890)
         self.groupBox = QtWidgets.QGroupBox(Form)
@@ -31,13 +32,13 @@ class Ui_customer_Info(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser.setGeometry(QtCore.QRect(30, 320, 411, 101))
+        self.textBrowser.setGeometry(QtCore.QRect(30, 320, 411, 161))
         self.textBrowser.setObjectName("textBrowser")
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser_2.setGeometry(QtCore.QRect(30, 530, 411, 311))
+        self.textBrowser_2.setGeometry(QtCore.QRect(30, 600, 411, 161))
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(30, 500, 271, 31))
+        self.label_2.setGeometry(QtCore.QRect(30, 570, 271, 31))
         self.label_2.setObjectName("label_2")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.groupBox)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(480, 10, 701, 831))
@@ -46,15 +47,18 @@ class Ui_customer_Info(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton.setGeometry(QtCore.QRect(30, 440, 411, 41))
-        self.pushButton.setObjectName("pushButton_4")
+        self.pushButton.setGeometry(QtCore.QRect(30, 500, 411, 51))
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_Add = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_Add.setGeometry(QtCore.QRect(30, 780, 411, 51))
+        self.pushButton_Add.setObjectName("pushButton_Add")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Customer"))
         self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -69,4 +73,5 @@ class Ui_customer_Info(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.label_2.setText(_translate("Form", "Login History"))
         self.pushButton.setText(_translate("Form", "Edit Profile"))
+        self.pushButton_Add.setText(_translate("Form", "Add Account"))
 import pics_ui_rc

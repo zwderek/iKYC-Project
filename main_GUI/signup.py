@@ -46,7 +46,7 @@ class Ui_signup(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Sign up"))
         self.pushButton.setText(_translate("Form", "Sign Up"))
         self.label.setText(_translate("Form", "Username"))
         self.label_2.setText(_translate("Form", "Password"))

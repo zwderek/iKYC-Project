@@ -8,6 +8,8 @@ from profile_edit import Ui_profile_edit
 from account_Info import Ui_account_Info
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QDialog
+#from FaceRecognition.facerecognition import FaceRecognition
+#from FaceRecognition.faceregister import FaceRegister
 import functions
 import pics_ui_rc
 from collections import OrderedDict
@@ -31,6 +33,23 @@ class signin_FaceIDWindow(QWidget, Ui_signin_FaceID):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.initUi()
+
+    def initUi(self):
+        '''
+        face_account_id = faceRecognition.recognize()
+        if face_account_id == -1:
+            self.textBrowser.setText("It seems that you have not registered yet.\n")
+            signin_FaceIDWindow.close()
+        else:
+            loginWindow.close()
+            signin_FaceIDWindow.close()
+            customer_InfoWindow.customer_id = face_account_id
+            demo.create_history(face_account_id)
+            customer_InfoWindow.initUi()  # update
+            customer_InfoWindow.addButton()
+            customer_InfoWindow.show()
+        '''
 
 class signin_PasswordWindow(QWidget, Ui_signin_Password):
     def __init__(self):
@@ -44,19 +63,22 @@ class signin_PasswordWindow(QWidget, Ui_signin_Password):
         self.pushButton.clicked.connect(lambda : self.signin())
 
     def signin(self):
-        loginWindow.close()
-        signin_PasswordWindow.close()
 
         signin_username = self.lineEdit.text()
         signin_password = self.lineEdit_2.text()
         tmp = demo.password_login(signin_username, signin_password)
         #print(signin_username, signin_password, tmp)
         if tmp > 0:
+            loginWindow.close()
+            signin_PasswordWindow.close()
             customer_InfoWindow.customer_id = tmp
             demo.create_history(tmp)
             customer_InfoWindow.initUi() #update
             customer_InfoWindow.addButton()
             customer_InfoWindow.show()
+        else:
+            self.lineEdit.setText("Wrong Username or Password")
+
 
 class signupWindow(QWidget, Ui_signup):
     def __init__(self):
@@ -71,8 +93,6 @@ class signupWindow(QWidget, Ui_signup):
         self.pushButton.clicked.connect(lambda: self.signup())
 
     def signup(self):
-        loginWindow.close()
-        signin_PasswordWindow.close()
 
         signup_username = self.lineEdit.text()
         signup_password_1 = self.lineEdit_2.text()
@@ -82,6 +102,9 @@ class signupWindow(QWidget, Ui_signup):
             tmp = demo.create_user(signup_username, signup_password_1)
             print(tmp)
             if tmp > 0:
+                loginWindow.close()
+                signin_PasswordWindow.close()
+
                 customer_InfoWindow.customer_id = tmp
                 demo.create_history(tmp)
                 customer_InfoWindow.initUi()
@@ -90,7 +113,7 @@ class signupWindow(QWidget, Ui_signup):
             if tmp == -2:
                 self.lineEdit.setText("This name is already been used!")
         else:
-            self.lineEdit_2.setText("Please reenter your password!")
+            self.lineEdit.setText("Please reenter your password!")
 
 
 class customer_InfoWindow(QWidget, Ui_customer_Info):
@@ -101,6 +124,9 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
         super().__init__()
         self.setupUi(self)
         self.initUi()
+
+        self.pushButton.clicked.connect(lambda: self.profile_edit())
+        self.pushButton_Add.clicked.connect(lambda: self.account_add())
     #   print(self.customer_id)
 
     def initUi(self):
@@ -108,7 +134,9 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
         result = demo.display_login_info(self.customer_id)
         self.display_customer_info = result["customer_and_login"]
         self.display_user_profile = result["profile"]
-        if Util.isNotNone(self.display_customer_info):
+        # print(self.display_customer_info)
+        # print(ReturnStatus.isAStatus(self.display_customer_info))
+        if Util.isValidResult(self.display_customer_info):
             username = self.display_customer_info[0]
             login_time = self.display_customer_info[1]
             login_date = self.display_customer_info[2]
@@ -118,7 +146,7 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
             to_pack["login_date"] = login_date
             # self.textBrowser_2.setText("username = " + username + "\nlogin_time = " + login_time + "\nlogin_date = " + login_time)
             self.textBrowser_2.setText(FrontHelper.dictionaryToInfostring(to_pack))
-        if Util.isNotNone(self.display_user_profile):
+        if Util.isValidResult(self.display_user_profile):
             profile_name = self.display_user_profile[0]
             gender = self.display_user_profile[1] #tbd
             birthday = self.display_user_profile[2]
@@ -134,7 +162,22 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
             to_pack["Profile status"] = FrontHelper.ispublicToString(is_public)
             self.textBrowser.setText(FrontHelper.dictionaryToInfostring(to_pack))
 
-        self.pushButton.clicked.connect(lambda: self.profile_edit())
+
+    def profile_edit(self):
+        profile_editWindow.profile_customer_id = self.customer_id
+        profile_editWindow.initUi()
+        profile_editWindow.show()
+
+    def account_add(self):
+        btn = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        btn.setText("TEST_NEW")
+        self.verticalLayout.addWidget(btn)
+        new_account_id = demo.create_account(self.customer_id)
+        ##update
+        #customer_InfoWindow.initUi()
+        #customer_InfoWindow.addButton()
+        #customer_InfoWindow.show()
+
 
 
     def addButton(self):
@@ -149,18 +192,15 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
             #self.btns[i].clicked.connect(lambda: self.account_Info(self.sender().text()))
             self.btns[i].clicked.connect(lambda: self.account_Info(self.sender().text()))
 
-    def profile_edit(self):
-        profile_editWindow.profile_customer_id = self.customer_id
-        profile_editWindow.show()
-
     def account_Info(self, id):
         account_InfoWindow.account_id = int(id.strip("Account ID: "))
+        account_InfoWindow.customer_id = self.customer_id
         account_InfoWindow.update()
         # print(account_InfoWindow.account_id)
         account_InfoWindow.show()
 
 class profile_editWindow(QWidget, Ui_profile_edit):
-    profile_customer_id = ""
+    profile_customer_id = -1
 
     def __init__(self):
         super().__init__()
@@ -168,8 +208,15 @@ class profile_editWindow(QWidget, Ui_profile_edit):
         self.initUi()
 
     def initUi(self):
-        self.pushButton.clicked.connect(lambda: self.submit())
-        customer_InfoWindow.initUi()
+        if self.profile_customer_id > 0:
+            current_profile = demo.read_profile(self.profile_customer_id)
+            #print(current_profile[0])
+            self.lineEdit.setText(current_profile[0])
+            #self.dateEdit.setDate(QtWidgets.QDate::fromString(current_profile[2],"yyyy-MM-dd"))
+            self.lineEdit_4.setText(current_profile[3])
+            self.plainTextEdit.setPlainText(current_profile[4])
+            self.pushButton.clicked.connect(lambda: self.submit())
+            customer_InfoWindow.initUi()
 
     def submit(self):
         edit_name = self.lineEdit.text()
@@ -178,8 +225,9 @@ class profile_editWindow(QWidget, Ui_profile_edit):
         edit_email = self.lineEdit_4.text()
         edit_msg = self.plainTextEdit.toPlainText()
         edit_is_public = FrontHelper.StringToIsPublic(self.comboBox_2.currentText())
-        print(edit_name, edit_gender, edit_birthday, edit_email, edit_msg, edit_is_public)
-        demo.update_profile(self.profile_customer_id, edit_name, edit_gender, edit_birthday, edit_email, edit_msg, None,edit_is_public)
+        #print(self.profile_customer_id, edit_name, edit_gender, edit_birthday, edit_email, edit_msg, edit_is_public)
+        res = demo.update_profile(self.profile_customer_id, edit_name, edit_gender, edit_birthday, edit_email, None, edit_msg, edit_is_public)
+        #print(res)
 
         customer_InfoWindow.close()
         customer_InfoWindow.initUi()
@@ -188,6 +236,7 @@ class profile_editWindow(QWidget, Ui_profile_edit):
 
 
 class account_InfoWindow(QMainWindow, Ui_account_Info):
+    customer_id = -1
     account_id = -1
 
     def __init__(self):
@@ -235,6 +284,9 @@ class account_InfoWindow(QMainWindow, Ui_account_Info):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+
+    #faceRecognition = FaceRecognition()
+    #faceRegister = FaceRegister()
 
     loginWindow = loginWindow()
     demo = functions.WeConnect()

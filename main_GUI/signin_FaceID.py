@@ -14,11 +14,30 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_signin_FaceID(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 300)
+        Form.resize(363, 385)
+        self.groupBox = QtWidgets.QGroupBox(Form)
+        self.groupBox.setGeometry(QtCore.QRect(0, 10, 351, 371))
+        self.groupBox.setTitle("")
+        self.groupBox.setObjectName("groupBox")
+        self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
+        self.textBrowser.setGeometry(QtCore.QRect(30, 230, 301, 121))
+        self.textBrowser.setObjectName("textBrowser")
+        self.label = QtWidgets.QLabel(self.groupBox)
+        self.label.setGeometry(QtCore.QRect(90, 20, 181, 181))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap(":/pics/pic/profile.png"))
+        self.label.setScaledContents(True)
+        self.label.setObjectName("label")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "FaceID"))
+        self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please look at your camera</p></body></html>"))
+import pics_ui_rc
