@@ -1,92 +1,57 @@
 """
-Implements Face Register and encapsulate into a class
+This Python Script Encapsulate Functions for face-recognition
 """
 
-import os
 import cv2
-import numpy as np
 
-class FaceRegister:
-    def __init__(self, NUM_IMGS = 400):
+class FaceRecognition:
+    def __init__(self, max_recognition_itr = 400):
         """
-        Initialize FaceRegister
+        Initialize FaceRecognizer
 
         Keyword Argument:
 
-        NUM_IMGS: Number of images captured for this user
+        max_recognition_itr: Max time allowed for re-recognition
         """
-        self.NUM_IMGS = NUM_IMGS
+        # Set max_recognition_itr
+        self.max_recognition_itr = max_recognition_itr
 
-    def capture(self, id:int):
+        # Load recognize and read label from model
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.recognizer.read("FaceRecognition/train.yml")
+
+        # load labels
+        #self.labels = {"person_name": 1}
+        #with open("labels.pickle", "rb") as f:
+            #self.labels = pickle.load(f)
+            #self.labels = {v: k for k, v in self.labels.items()}
+
+        # Define camera and detect face
+        self.face_cascade = cv2.CascadeClassifier('FaceRecognition/haarcascade/haarcascade_frontalface_default.xml')
+        self.cap = cv2.VideoCapture(0)
+
+    def recognize(self)->int:
         """
-        Capture the images
+        Recoginize the face
 
-        Keyword Argument:
-
-        id: customer_id, the id of user
+        Return -1 if no label matches, return customer_id if face matches.
         """
-        # Initialize Camera
-        video_capture = cv2.VideoCapture(0)
+        for i in range(self.max_recognition_itr):
 
-        # Create Folder
-        if not os.path.exists('FaceRecognition/data/{}'.format(id)):
-            os.mkdir('FaceRecognition/data/{}'.format(id))
+            # Open Camera and Read Data
+            ret, frame = self.cap.read()
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=3)
 
-        for i in range(self.NUM_IMGS):
-            # Capture frame-by-frame
-            ret, frame = video_capture.read()
-            cv2.imwrite("FaceRecognition/data/{}/{}{:03d}.jpg".format(id, id, i), frame)
+            for (x, y, w, h) in faces:
+                roi_gray = gray[y:y + h, x:x + w]
+                # predict the id and confidence for faces
+                id_, conf = self.recognizer.predict(roi_gray)
 
-        video_capture.release()
-
-    def train(self):
-        """
-        Train the model
-        """
-        # Get directory
-        BASE_DIR = os.path.dirname(os.path.abspath("__file__"))+"/FaceRecognition/"
-        image_dir = os.path.join(BASE_DIR, "data")
-
-        # Load the OpenCV face recognition detector Haar
-        face_cascade = cv2.CascadeClassifier('FaceRecognition/haarcascade/haarcascade_frontalface_default.xml')
-        # Create OpenCV LBPH recognizer for training
-        recognizer = cv2.face.LBPHFaceRecognizer_create()
-
-        y_label = []
-        x_train = []
-
-        # Traverse all face images in `data` folder
-        for root, dirs, files in os.walk(image_dir):
-            # This is second-level folder system
-            for file in files:
-                # file is str
-                if file.endswith("png") or file.endswith("jpg"):
-                    path = os.path.join(root, file)
-                    id_ = int(file[:-7])
-
-                    # Convert Image to Numpy Array
-                    image_array = cv2.imread(path)
-                    image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
-                    # Detect Faces
-                    faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=3)
-
-                    # Add to labels
-                    for (x, y, w, h) in faces:
-                        roi = image_array[y:y+h, x:x+w]
-                        x_train.append(roi)
-                        y_label.append(id_)
-
-        # Train the recognizer and save the trained model.
-        recognizer.train(x_train, np.array(y_label))
-        recognizer.save("FaceRecognition/train.yml")
-
-    def register(self, id:int):
-        """
-        An wrapper API, equivalent to call capture(id) and train()
-        """
-        self.capture(id)
-        self.train()
+                if conf >= 60:
+                    return id_
+        return -1
 
 if __name__ == "__main__":
-    faceRegister = FaceRegister()
-    faceRegister.register(6)
+    faceRecognition = FaceRecognition()
+    print(faceRecognition.recognize())
