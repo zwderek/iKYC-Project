@@ -38,4 +38,21 @@ class FrontHelper:
             output = output[0:-1]
         return output
 
+    @staticmethod
+    def isValidString(input) -> bool:
+        """return if a string is valid as user input
+
+        Args:
+            input ([type]): [description]
+
+        Returns:
+            bool: [description]
+        """
+        if input is None:
+            return False
+        elif type(input) is not str:
+            return False
+        else:
+            return input.isalnum()
+
 # print(FrontHelper.dictionaryToInfostring({"1":2, "2": "NULL", "3": None}))
