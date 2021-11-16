@@ -123,6 +123,7 @@ class Util:
 class ReturnStatus:
     """
     For easy of info transmit between front and back end
+    Return statuses must be <= 0, or it will be confused with ids
     """
     OK = 0
     DATABASE_ERROR = -1
@@ -133,6 +134,7 @@ class ReturnStatus:
         ACCOUNT_NOT_MATCH_CUSTOMER = -5
     class LOGIN_ERROR:
         PWD_NOT_MATCH = -6
+        NAME_NOT_EXISTING = -7
 
     @staticmethod
     def statusToNarration(status):
@@ -158,6 +160,8 @@ class ReturnStatus:
             return "Account id doesn't match customer id! "
         elif status == ReturnStatus.LOGIN_ERROR.PWD_NOT_MATCH:
             return "Password wrong! "
+        elif status == ReturnStatus.LOGIN_ERROR.NAME_NOT_EXISTING:
+            return "Username not existing! "
 
     @staticmethod
     def isAStatus(content):
@@ -173,6 +177,10 @@ class ReturnStatus:
             return True
         else:
             return False
+    
+    @staticmethod
+    def isError(content):
+        return ReturnStatus.isAStatus(content) and content < 0
 
 class WeConnect:
     def __init__(self) -> None:
@@ -355,7 +363,7 @@ class WeConnect:
         original = Util.fitArray(original)
         try:
             sql = """
-            UPDATE Profile SET `name` = {}, `gender` = {}, `birthday` = {}, `email` = {}, `pic` = {}, `welcome_msg` = {}, `is_public` = {} WHERE (`profile_id` = {});
+            UPDATE Profile SET `name` = {}, `gender` = {}, `birthday` = {}, `email` = {}, `pic` = {}, `welcome_msg` = {}, `is_public` = {} WHERE (`customer_id` = {});
             """.format(*original, customer_id)
             self.cursor.execute(sql)
             self.myconn.commit()
@@ -501,6 +509,15 @@ class WeConnect:
     # Additional 2 Delete Account
 
     def delete_account(self, customer_id: int, account_id: int) -> int:
+        """Delete account
+
+        Args:
+            customer_id (int): [description]
+            account_id (int): [description]
+
+        Returns:
+            int: [description]
+        """
         self.cursor.execute("SELECT customer_id, balance FROM Account WHERE account_id = {}".format(account_id))
         db_customer_id, balance = self.cursor.fetchone()
         # Reject Deletion if account not belong to this user or balance is not 0
@@ -517,6 +534,16 @@ class WeConnect:
     # Additional 2 Make Transaction
     # Return True if transaction are proceeded, False otherwise
     def make_transaction(self, from_account: int, to_account: int, amount: int) -> int:
+        """Make transaction. This function should record a transaction, and make changes to the two accounts in concern
+
+        Args:
+            from_account (int): [id]
+            to_account (int): [id]
+            amount (int): [> 0]
+
+        Returns:
+            int: [return status]
+        """
         try:
             # Verify Correctness
             self.cursor.execute("SELECT balance FROM Account WHERE account_id = {}".format(from_account))
@@ -553,7 +580,11 @@ class WeConnect:
         """
         try:
             self.cursor.execute("SELECT pwd FROM Customer WHERE name = '{}'".format(name))
-            db_pwd = self.cursor.fetchone()[0]
+            res = self.cursor.fetchone()
+            if Util.isNone(res):
+                return ReturnStatus.LOGIN_ERROR.NAME_NOT_EXISTING
+            db_pwd = res[0]
+            # db_pwd = self.cursor.fetchone()[0]
             if db_pwd != pwd:
                 return ReturnStatus.LOGIN_ERROR.PWD_NOT_MATCH
             self.cursor.execute("SELECT customer_id FROM Customer WHERE name = '{}'".format(name))
