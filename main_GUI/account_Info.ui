@@ -15,84 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="2">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>amount</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>type: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2" colspan="2">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>detail transactions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="4">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>day</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="6">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>time</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="2">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>from</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLineEdit" name="lineEdit_3">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>month</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>account information: </string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="5">
      <widget class="QComboBox" name="comboBox_2">
       <item>
@@ -296,34 +218,28 @@
       </item>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_3">
       <property name="maximumSize">
        <size>
         <width>200</width>
         <height>40</height>
        </size>
       </property>
+      <property name="text">
+       <string>type: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="3">
+     <widget class="QLabel" name="label_16">
       <property name="text">
        <string/>
       </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
-    <item row="12" column="0">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>delete account</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
       <property name="maximumSize">
        <size>
         <width>200</width>
@@ -331,15 +247,29 @@
        </size>
       </property>
       <property name="text">
-       <string>customer_id: </string>
+       <string>account information: </string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="enabled">
-       <bool>true</bool>
+    <item row="4" column="0">
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
       </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>amount</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_5">
       <property name="maximumSize">
        <size>
         <width>200</width>
@@ -347,14 +277,7 @@
        </size>
       </property>
       <property name="text">
-       <string>account_id: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>search</string>
+       <string>balance: </string>
       </property>
      </widget>
     </item>
@@ -430,10 +353,26 @@
       </item>
      </widget>
     </item>
-    <item row="11" column="4">
-     <widget class="QLabel" name="label_13">
+    <item row="12" column="0">
+     <widget class="QPushButton" name="pushButton_2">
       <property name="text">
-       <string>to</string>
+       <string>delete account</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>account_id: </string>
       </property>
      </widget>
     </item>
@@ -456,6 +395,134 @@
       </item>
      </widget>
     </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>customer_id: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="13">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="7">
+     <widget class="QLineEdit" name="lineEdit_8"/>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLineEdit" name="lineEdit_3">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>search</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="6">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>time</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLineEdit" name="lineEdit_5">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="2">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>from</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="2">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="text">
+       <string>transact</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="readOnly">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="3">
+     <widget class="QLineEdit" name="lineEdit_6"/>
+    </item>
+    <item row="2" column="5">
+     <widget class="QComboBox" name="comboBox_5">
+      <item>
+       <property name="text">
+        <string>All acounts</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Specific account</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="2" colspan="2">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>detail transactions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>target</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2" colspan="2">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>make transaction</string>
+      </property>
+     </widget>
+    </item>
     <item row="8" column="0">
      <widget class="QLineEdit" name="lineEdit_4">
       <property name="maximumSize">
@@ -466,10 +533,16 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1" rowspan="13">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>currency: </string>
       </property>
      </widget>
     </item>
@@ -507,22 +580,22 @@
       </row>
       <column>
        <property name="text">
-        <string>transaction_id</string>
+        <string>from_name</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>account_id</string>
+        <string>to_name</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>transaction_date</string>
+        <string>trans_time</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>transaction_time</string>
+        <string>trans_date</string>
        </property>
       </column>
       <column>
@@ -532,49 +605,17 @@
       </column>
      </widget>
     </item>
-    <item row="11" column="5">
-     <widget class="QLineEdit" name="lineEdit_7"/>
-    </item>
-    <item row="11" column="0">
-     <widget class="QLineEdit" name="lineEdit_5">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="3">
-     <widget class="QLineEdit" name="lineEdit_6"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
+    <item row="11" column="4">
+     <widget class="QLabel" name="label_13">
       <property name="text">
-       <string>currency: </string>
+       <string>to</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLineEdit" name="lineEdit_2">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="2">
-     <widget class="QPushButton" name="pushButton_3">
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_9">
       <property name="text">
-       <string>transact</string>
+       <string>month</string>
       </property>
      </widget>
     </item>
@@ -585,33 +626,23 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="7">
-     <widget class="QLineEdit" name="lineEdit_8"/>
+    <item row="11" column="5">
+     <widget class="QLineEdit" name="lineEdit_7"/>
     </item>
-    <item row="10" column="2" colspan="2">
-     <widget class="QLabel" name="label_14">
+    <item row="2" column="7">
+     <widget class="QLineEdit" name="lineEdit_9"/>
+    </item>
+    <item row="1" column="4">
+     <widget class="QLabel" name="label_11">
       <property name="text">
-       <string>make transaction</string>
+       <string>day</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
+    <item row="2" column="6">
+     <widget class="QLabel" name="label_18">
       <property name="text">
-       <string>balance: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="3">
-     <widget class="QLabel" name="label_16">
-      <property name="text">
-       <string/>
+       <string>specific account id</string>
       </property>
      </widget>
     </item>
