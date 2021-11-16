@@ -520,16 +520,17 @@ class WeConnect:
             if from_balance < amount:
                 return ReturnStatus.ACCOUNT_ERROR.AMOUNT_SHORT
             # Update Transaction Infos
-            self.cursor.execute("SELECT MAX(account_id) FROM Account;")
+            self.cursor.execute("SELECT MAX(transaction_id) FROM Transaction;")
             transaction_id = self.cursor.fetchone()[0] + 1
             entry = (transaction_id, from_account, to_account, amount)
-            sql = "INSERT INTO Transaction VALUES ({}, {}, CURDATE(), NOW(), {});".format(from_account, -amount, to_account, amount)
+            sql = "INSERT INTO Transaction VALUES ({}, {}, {}, CURDATE(), NOW(), {});".format(*entry)
             self.cursor.execute(sql)
             # Update Account Infos
             self.cursor.execute("UPDATE Account SET balance = {} WHERE account_id = {}".format(from_balance - amount, from_account))
             self.cursor.execute("SELECT balance FROM Account WHERE account_id = {}".format(to_account))
             to_balance = self.cursor.fetchone()[0]
             self.cursor.execute("UPDATE Account SET balance = {} WHERE account_id = {}".format(to_balance + amount, to_account))
+            self.myconn.commit()
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
         return ReturnStatus.OK
@@ -537,6 +538,15 @@ class WeConnect:
     # Additional 3 Password Login
     # Return customer_id
     def password_login(self, name: str, pwd: str) -> int:
+        """Check whether password is correct or not
+
+        Args:
+            name (str): username
+            pwd (str): password
+
+        Returns:
+            int: customer_id on success, error status on failure
+        """
         try:
             self.cursor.execute("SELECT pwd FROM Customer WHERE name = '{}'".format(name))
             db_pwd = self.cursor.fetchone()[0]
