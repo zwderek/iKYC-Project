@@ -200,6 +200,7 @@ class WeConnect:
     def __init__(self) -> None:
         # 0 Create database connection
         self.myconn = mysql.connector.connect(host="localhost", user="root", password="tanlihui991228", database="face")
+        # self.myconn = mysql.connector.connect(host="localhost", user="root", password="", database="facerecognition")
         self.date = datetime.utcnow()
         self.now = datetime.now()
         self.current_time = self.now.strftime("%H:%M:%S")
@@ -554,7 +555,9 @@ class WeConnect:
         try:
             self.cursor.execute("SELECT MAX(account_id) FROM Account;")
             account_id = Util.makeIdValid(self.cursor.fetchone()[0]) + 1
-            sql = "INSERT INTO Account VALUES ({}, '{}', '{}', {}, 0)".format(customer_id, type, currency, account_id)
+            entry = (account_id, customer_id, type, currency)
+            entry = Util.fitArray(entry)
+            sql = "INSERT INTO Account VALUES ({}, {}, {}, {}, 0)".format(*entry)
             self.cursor.execute(sql)
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
