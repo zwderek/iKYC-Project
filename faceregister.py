@@ -30,13 +30,13 @@ class FaceRegister:
         video_capture = cv2.VideoCapture(0)
 
         # Create Folder
-        if not os.path.exists('data/{}'.format(id)):
-            os.mkdir('data/{}'.format(id))
+        if not os.path.exists('FaceRecognition/data/{}'.format(id)):
+            os.mkdir('FaceRecognition/data/{}'.format(id))
 
         for i in range(self.NUM_IMGS):
             # Capture frame-by-frame
             ret, frame = video_capture.read()
-            cv2.imwrite("data/{}/{}{:03d}.jpg".format(id, id, i), frame)
+            cv2.imwrite("FaceRecognition/data/{}/{}{:03d}.jpg".format(id, id, i), frame)
 
         video_capture.release()
 
@@ -45,11 +45,12 @@ class FaceRegister:
         Train the model
         """
         # Get directory
-        BASE_DIR = os.path.dirname(os.path.abspath("__file__"))
+        BASE_DIR = os.path.dirname(os.path.abspath("__file__"))+"/FaceRecognition/"
+        print(BASE_DIR)
         image_dir = os.path.join(BASE_DIR, "data")
 
         # Load the OpenCV face recognition detector Haar
-        face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
+        face_cascade = cv2.CascadeClassifier('FaceRecognition/haarcascade/haarcascade_frontalface_default.xml')
         # Create OpenCV LBPH recognizer for training
         recognizer = cv2.face.LBPHFaceRecognizer_create()
 
@@ -80,7 +81,7 @@ class FaceRegister:
 
         # Train the recognizer and save the trained model.
         recognizer.train(x_train, np.array(y_label))
-        recognizer.save("train.yml")
+        recognizer.save("FaceRecognition/train.yml")
 
     def register(self, id:int):
         """
@@ -91,5 +92,4 @@ class FaceRegister:
 
 if __name__ == "__main__":
     faceRegister = FaceRegister()
-    faceRegister.capture(5)
-    faceRegister.train()
+    faceRegister.register(6)
