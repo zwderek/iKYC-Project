@@ -5,7 +5,6 @@ Implements Face Register and encapsulate into a class
 import os
 import cv2
 import numpy as np
-from PIL import Image
 
 class FaceRegister:
     def __init__(self, NUM_IMGS = 400):
@@ -46,7 +45,6 @@ class FaceRegister:
         """
         # Get directory
         BASE_DIR = os.path.dirname(os.path.abspath("__file__"))+"/FaceRecognition/"
-        print(BASE_DIR)
         image_dir = os.path.join(BASE_DIR, "data")
 
         # Load the OpenCV face recognition detector Haar
@@ -67,9 +65,8 @@ class FaceRegister:
                     id_ = int(file[:-7])
 
                     # Convert Image to Numpy Array
-                    pil_image = Image.open(path).convert("L")
-                    image_array = np.array(pil_image, "uint8")
-
+                    image_array = cv2.imread(path)
+                    image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
                     # Detect Faces
                     faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=3)
 
