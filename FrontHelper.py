@@ -54,5 +54,44 @@ class FrontHelper:
             return False
         else:
             return input.isalnum()
+    
+    @staticmethod
+    def genderToRepresentation(gender):
+        formattedGender = None
+        if type(gender) is str:
+            try:
+                formattedGender = int(gender)
+            except BaseException:
+                return "Error"
+        if gender == 0:
+            return "Male"
+        elif gender == 1:
+            return "Female"
+        elif gender == 2:
+            return "Others"
+        else:
+            return "Error"
 
-# print(FrontHelper.dictionaryToInfostring({"1":2, "2": "NULL", "3": None}))
+    @staticmethod
+    def StringToGender(genderText) -> int:
+        if type(genderText) is not str:
+            return 3
+        genderText = genderText.lower()
+        if genderText == "male":
+            return 0
+        elif genderText == "female":
+            return 1
+        elif genderText == "others":
+            return 2
+        else:
+            return 3
+
+    @staticmethod
+    def StringToIsPublic(ispublicText) -> int:
+        if type(ispublicText) is not str:
+            return 0
+        ispublicText = ispublicText.lower()
+        if ispublicText == "public":
+            return 1
+        else:
+            return 0
