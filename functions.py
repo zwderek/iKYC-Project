@@ -51,6 +51,13 @@ class Util:
             if el is not None:
                 original[elidx] = el
         return tuple(original)
+    
+    @staticmethod
+    def makeIdValid(id: int) -> int:
+        if id is None:
+            return 0
+        else:
+            return id
 
     @staticmethod
     def isEmpty(input):
@@ -135,6 +142,7 @@ class ReturnStatus:
     class LOGIN_ERROR:
         PWD_NOT_MATCH = -6
         NAME_NOT_EXISTING = -7
+    DATA_NOT_EXISTING = -8
 
     @staticmethod
     def statusToNarration(status):
@@ -162,6 +170,8 @@ class ReturnStatus:
             return "Password wrong! "
         elif status == ReturnStatus.LOGIN_ERROR.NAME_NOT_EXISTING:
             return "Username not existing! "
+        elif status == ReturnStatus.DATA_NOT_EXISTING:
+            return "Data not existing! "
 
     @staticmethod
     def isAStatus(content):
@@ -232,7 +242,11 @@ class WeConnect:
             self.cursor.execute(sql)
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
-        return self.cursor.fetchone()
+        results = self.cursor.fetchall()
+        if Util.isNone(results):
+            return ReturnStatus.DATA_NOT_EXISTING
+        return results[0]
+        # return self.cursor.fetchone()
 
     # 1.1 Search user by username
     def read_user_by_name(self, name: str):
@@ -337,7 +351,10 @@ class WeConnect:
             self.cursor.execute(sql)
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
-        return self.cursor.fetchone()
+        results = self.cursor.fetchall()
+        if Util.isNone(results):
+            return ReturnStatus.DATA_NOT_EXISTING
+        return results[0]
 
     # A.2 Update User Profile
     def update_profile(self, customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, welcome_msg:str=None, is_public:bool=None) -> int:
@@ -497,6 +514,16 @@ class WeConnect:
     # Additional 1 Create New Account 
 
     def create_account(self, customer_id: int, type: str, currency: str) -> int:
+        """Create account
+
+        Args:
+            customer_id (int): [description]
+            type (str): [Current, Saving, Borrowing]
+            currency (str): [CYN, HKD, USD, ...]
+
+        Returns:
+            int: [success: account_id, failure: return status]
+        """
         try:
             self.cursor.execute("SELECT MAX(account_id) FROM Account;")
             account_id = self.cursor.fetchone()[0] + 1
@@ -504,7 +531,7 @@ class WeConnect:
             self.cursor.execute(sql)
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
-        return ReturnStatus.OK
+        return account_id
 
     # Additional 2 Delete Account
 
@@ -516,7 +543,7 @@ class WeConnect:
             account_id (int): [description]
 
         Returns:
-            int: [description]
+            int: [return status]
         """
         self.cursor.execute("SELECT customer_id, balance FROM Account WHERE account_id = {}".format(account_id))
         db_customer_id, balance = self.cursor.fetchone()
