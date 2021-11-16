@@ -8,8 +8,8 @@ from profile_edit import Ui_profile_edit
 from account_Info import Ui_account_Info
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QDialog
-#from FaceRecognition.facerecognition import FaceRecognition
-#from FaceRecognition.faceregister import FaceRegister
+from FaceRecognition.facerecognition import FaceRecognition
+from FaceRecognition.faceregister import FaceRegister
 import functions
 import pics_ui_rc
 from collections import OrderedDict
@@ -36,20 +36,18 @@ class signin_FaceIDWindow(QWidget, Ui_signin_FaceID):
         self.initUi()
 
     def initUi(self):
-        '''
         face_account_id = faceRecognition.recognize()
         if face_account_id == -1:
             self.textBrowser.setText("It seems that you have not registered yet.\n")
-            signin_FaceIDWindow.close()
+            self.close()
         else:
             loginWindow.close()
-            signin_FaceIDWindow.close()
+            self.close()
             customer_InfoWindow.customer_id = face_account_id
             demo.create_history(face_account_id)
             customer_InfoWindow.initUi()  # update
             customer_InfoWindow.addButton()
             customer_InfoWindow.show()
-        '''
 
 class signin_PasswordWindow(QWidget, Ui_signin_Password):
     def __init__(self):
@@ -102,6 +100,10 @@ class signupWindow(QWidget, Ui_signup):
             tmp = demo.create_user(signup_username, signup_password_1)
             print(tmp)
             if tmp > 0:
+
+                faceRegister.register(tmp)
+                print("xxx")
+
                 loginWindow.close()
                 signin_PasswordWindow.close()
 
@@ -169,10 +171,17 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
         profile_editWindow.show()
 
     def account_add(self):
-        btn = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        btn.setText("TEST_NEW")
-        self.verticalLayout.addWidget(btn)
-        new_account_id = demo.create_account(self.customer_id)
+        account_type = self.comboBox.currentText()
+        account_currency = self.comboBox_2.currentText()
+        # print(self.customer_id, account_type, account_currency)
+        # print(type(self.customer_id))
+        new_account_id = demo.create_account(int(self.customer_id), account_type, account_currency)
+        #print(new_account_id)
+
+        self.btn = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.btn.setText("Account ID: " + str(new_account_id))
+        self.verticalLayout.addWidget(self.btn)
+        self.btn.clicked.connect(lambda: self.account_Info(self.sender().text()))
         ##update
         #customer_InfoWindow.initUi()
         #customer_InfoWindow.addButton()
@@ -285,11 +294,12 @@ class account_InfoWindow(QMainWindow, Ui_account_Info):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    #faceRecognition = FaceRecognition()
-    #faceRegister = FaceRegister()
+    faceRecognition = FaceRecognition()
+    faceRegister = FaceRegister()
 
     loginWindow = loginWindow()
     demo = functions.WeConnect()
+    returnstatus = functions.ReturnStatus
 
     signin_FaceIDWindow = signin_FaceIDWindow()
     signin_PasswordWindow = signin_PasswordWindow()
@@ -297,6 +307,8 @@ if __name__ == '__main__':
     customer_InfoWindow = customer_InfoWindow()
     profile_editWindow = profile_editWindow()
     account_InfoWindow = account_InfoWindow()
+
+
 
     loginWindow.show()
 
