@@ -334,6 +334,29 @@ class WeConnect:
             return ReturnStatus.DATABASE_ERROR
         return ReturnStatus.OK
 
+    # B.2 read history list
+    def read_history(self, customer_id: int, limit: int=10) -> list:
+        """Read all login histories of user
+
+        Args:
+            customer_id (int): [id]
+            limit (int): [number of entries to show]
+
+        Returns:
+            list: [list of login history]
+        """
+        try:
+            sql = """SELECT TIME_FORMAT(login_time, '%H:%i:%s'), 
+            DATE_FORMAT(login_date, '%Y-%m-%d') FROM Login
+            WHERE customer_id = '{}'
+            ORDER BY login_date DESC, login_time DESC
+            LIMIT {};""".format(customer_id, limit)
+            self.cursor.execute(sql)
+        except BaseException:
+            return ReturnStatus.DATABASE_ERROR
+        return self.cursor.fetchall()
+
+
     # A user profile
     # A.1 Read User Profile
     def read_profile(self, customer_id: int):
