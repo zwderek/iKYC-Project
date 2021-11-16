@@ -36,7 +36,13 @@ class signin_FaceIDWindow(QWidget, Ui_signin_FaceID):
         self.initUi()
 
     def initUi(self):
+        self.pushButton.clicked.connect(lambda: self.FaceID())
+
+
+    def FaceID(self):
+        #face_account_id = 2
         face_account_id = faceRecognition.recognize()
+        #print(face_account_id)
         if face_account_id == -1:
             self.textBrowser.setText("It seems that you have not registered yet.\n")
             self.close()
@@ -98,14 +104,13 @@ class signupWindow(QWidget, Ui_signup):
 
         if signup_password_1 == signup_password_2:  # 判断是否可以login 并创建用户
             tmp = demo.create_user(signup_username, signup_password_1)
-            print(tmp)
+            #print(tmp)
             if tmp > 0:
 
                 faceRegister.register(tmp)
-                print("xxx")
 
                 loginWindow.close()
-                signin_PasswordWindow.close()
+                self.close()
 
                 customer_InfoWindow.customer_id = tmp
                 demo.create_history(tmp)
@@ -293,18 +298,23 @@ class account_InfoWindow(QMainWindow, Ui_account_Info):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    demo = functions.WeConnect()
+    returnstatus = functions.ReturnStatus
+
 
     faceRecognition = FaceRecognition()
     faceRegister = FaceRegister()
 
     loginWindow = loginWindow()
-    demo = functions.WeConnect()
-    returnstatus = functions.ReturnStatus
+    customer_InfoWindow = customer_InfoWindow()
+
+
+
 
     signin_FaceIDWindow = signin_FaceIDWindow()
     signin_PasswordWindow = signin_PasswordWindow()
     signupWindow = signupWindow()
-    customer_InfoWindow = customer_InfoWindow()
+
     profile_editWindow = profile_editWindow()
     account_InfoWindow = account_InfoWindow()
 

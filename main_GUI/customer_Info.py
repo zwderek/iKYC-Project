@@ -13,7 +13,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_customer_Info(object):
     def setupUi(self, Form):
-        Form.setWindowTitle("Customer")
         Form.setObjectName("Form")
         Form.resize(1219, 890)
         self.groupBox = QtWidgets.QGroupBox(Form)
@@ -35,13 +34,13 @@ class Ui_customer_Info(object):
         self.textBrowser.setGeometry(QtCore.QRect(30, 320, 411, 161))
         self.textBrowser.setObjectName("textBrowser")
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser_2.setGeometry(QtCore.QRect(30, 600, 411, 161))
+        self.textBrowser_2.setGeometry(QtCore.QRect(30, 600, 411, 261))
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
         self.label_2.setGeometry(QtCore.QRect(30, 570, 271, 31))
         self.label_2.setObjectName("label_2")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.groupBox)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(480, 10, 701, 831))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(480, 10, 701, 681))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -50,15 +49,33 @@ class Ui_customer_Info(object):
         self.pushButton.setGeometry(QtCore.QRect(30, 500, 411, 51))
         self.pushButton.setObjectName("pushButton")
         self.pushButton_Add = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_Add.setGeometry(QtCore.QRect(30, 780, 411, 51))
+        self.pushButton_Add.setGeometry(QtCore.QRect(480, 810, 701, 51))
         self.pushButton_Add.setObjectName("pushButton_Add")
+        self.comboBox = QtWidgets.QComboBox(self.groupBox)
+        self.comboBox.setGeometry(QtCore.QRect(480, 730, 271, 51))
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.label_3 = QtWidgets.QLabel(self.groupBox)
+        self.label_3.setGeometry(QtCore.QRect(480, 690, 141, 41))
+        self.label_3.setObjectName("label_3")
+        self.comboBox_2 = QtWidgets.QComboBox(self.groupBox)
+        self.comboBox_2.setGeometry(QtCore.QRect(830, 730, 341, 51))
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.label_4 = QtWidgets.QLabel(self.groupBox)
+        self.label_4.setGeometry(QtCore.QRect(830, 690, 181, 41))
+        self.label_4.setObjectName("label_4")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Customer"))
+        Form.setWindowTitle(_translate("Form", "Form"))
         self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -74,4 +91,12 @@ class Ui_customer_Info(object):
         self.label_2.setText(_translate("Form", "Login History"))
         self.pushButton.setText(_translate("Form", "Edit Profile"))
         self.pushButton_Add.setText(_translate("Form", "Add Account"))
+        self.comboBox.setItemText(0, _translate("Form", "Current"))
+        self.comboBox.setItemText(1, _translate("Form", "Saving"))
+        self.comboBox.setItemText(2, _translate("Form", "Credit"))
+        self.label_3.setText(_translate("Form", "Type"))
+        self.comboBox_2.setItemText(0, _translate("Form", "RMB"))
+        self.comboBox_2.setItemText(1, _translate("Form", "USD"))
+        self.comboBox_2.setItemText(2, _translate("Form", "HKD"))
+        self.label_4.setText(_translate("Form", "Currency"))
 import pics_ui_rc

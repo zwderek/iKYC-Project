@@ -20,7 +20,7 @@ class Ui_signin_FaceID(object):
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser.setGeometry(QtCore.QRect(30, 230, 301, 121))
+        self.textBrowser.setGeometry(QtCore.QRect(30, 230, 301, 61))
         self.textBrowser.setObjectName("textBrowser")
         self.label = QtWidgets.QLabel(self.groupBox)
         self.label.setGeometry(QtCore.QRect(90, 20, 181, 181))
@@ -28,6 +28,9 @@ class Ui_signin_FaceID(object):
         self.label.setPixmap(QtGui.QPixmap(":/pics/pic/profile.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
+        self.pushButton = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton.setGeometry(QtCore.QRect(30, 310, 301, 41))
+        self.pushButton.setObjectName("pushButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -40,4 +43,5 @@ class Ui_signin_FaceID(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please look at your camera</p></body></html>"))
+        self.pushButton.setText(_translate("Form", "Sign in with FaceID"))
 import pics_ui_rc
