@@ -187,7 +187,7 @@ class ReturnStatus:
         Returns:
             [type]: [description]
         """
-        if content is int and content <= 0:
+        if type(content) is int and content <= 0:
             return True
         else:
             return False
@@ -295,7 +295,7 @@ class WeConnect:
             return ReturnStatus.DATABASE_ERROR
         try:
             self.cursor.execute("SELECT MAX(customer_id) FROM Customer;")
-            customer_id = self.cursor.fetchone()[0] + 1
+            customer_id = Util.makeIdValid(self.cursor.fetchone()[0]) + 1
             entry = (customer_id, name, pwd)
             entry = Util.fitArray(entry)
             sql = "INSERT INTO Customer VALUES ({}, {}, {})".format(*entry)
@@ -437,7 +437,7 @@ class WeConnect:
         """
         try:
             self.cursor.execute("SELECT MAX(profile_id) FROM Profile;")
-            profile_id = self.cursor.fetchone()[0] + 1
+            profile_id = Util.makeIdValid(self.cursor.fetchone()[0]) + 1
             entry = (profile_id, customer_id, name, gender, birthday, email, pic, welcome_msg, is_public)
             entry = Util.fitArray(entry)
             sql = "INSERT INTO Profile (`profile_id`, `customer_id`, `name`, `gender`, `birthday`, `email`, `pic`, `welcome_msg`, `is_public`) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {});".format(*entry)
@@ -530,7 +530,7 @@ class WeConnect:
         """
         try:
             self.cursor.execute("SELECT MAX(account_id) FROM Account;")
-            account_id = self.cursor.fetchone()[0] + 1
+            account_id = Util.makeIdValid(self.cursor.fetchone()[0]) + 1
             sql = "INSERT INTO Account VALUES ({}, '{}', '{}', {}, 0)".format(customer_id, type, currency, account_id)
             self.cursor.execute(sql)
         except BaseException:
@@ -550,7 +550,10 @@ class WeConnect:
             int: [return status]
         """
         self.cursor.execute("SELECT customer_id, balance FROM Account WHERE account_id = {}".format(account_id))
-        db_customer_id, balance = self.cursor.fetchone()
+        results = self.cursor.fetchall()
+        if Util.isNone(results):
+            return ReturnStatus.DATA_NOT_EXISTING
+        db_customer_id, balance = results[0]
         # Reject Deletion if account not belong to this user or balance is not 0
         if db_customer_id != customer_id:
             return ReturnStatus.ACCOUNT_ERROR.ACCOUNT_NOT_MATCH_CUSTOMER
@@ -578,19 +581,26 @@ class WeConnect:
         try:
             # Verify Correctness
             self.cursor.execute("SELECT balance FROM Account WHERE account_id = {}".format(from_account))
-            from_balance = self.cursor.fetchone()[0]
+            results = self.cursor.fetchall()
+            if Util.isNone(results):
+                return ReturnStatus.DATA_NOT_EXISTING
+            from_balance = results[0][0]
             if from_balance < amount:
                 return ReturnStatus.ACCOUNT_ERROR.AMOUNT_SHORT
             # Update Transaction Infos
             self.cursor.execute("SELECT MAX(transaction_id) FROM Transaction;")
-            transaction_id = self.cursor.fetchone()[0] + 1
+            transaction_id = Util.makeIdValid(self.cursor.fetchone()[0]) + 1
             entry = (transaction_id, from_account, to_account, amount)
             sql = "INSERT INTO Transaction VALUES ({}, {}, {}, CURDATE(), NOW(), {});".format(*entry)
             self.cursor.execute(sql)
             # Update Account Infos
             self.cursor.execute("UPDATE Account SET balance = {} WHERE account_id = {}".format(from_balance - amount, from_account))
             self.cursor.execute("SELECT balance FROM Account WHERE account_id = {}".format(to_account))
-            to_balance = self.cursor.fetchone()[0]
+            results = self.cursor.fetchall()
+            if Util.isNone(results):
+                return ReturnStatus.DATA_NOT_EXISTING
+            to_balance = results[0][0]
+            # to_balance = self.cursor.fetchone()[0]
             self.cursor.execute("UPDATE Account SET balance = {} WHERE account_id = {}".format(to_balance + amount, to_account))
             self.myconn.commit()
         except BaseException:
