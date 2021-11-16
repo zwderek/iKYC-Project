@@ -169,7 +169,7 @@ class ReturnStatus:
         Returns:
             [type]: [description]
         """
-        if content is int:
+        if content is int and content <= 0:
             return True
         else:
             return False
@@ -255,7 +255,7 @@ class WeConnect:
             welcome_msg: user set welcome message
             pwd: password
         Returns:
-            True on success, False on failure
+            customer_id on success, error status on failure
         """
         try:
             unique_check_sql = "SELECT name FROM Customer WHERE name='{}';".format(name)
@@ -274,10 +274,13 @@ class WeConnect:
             entry = Util.fitArray(entry)
             sql = "INSERT INTO Customer VALUES ({}, {}, {})".format(*entry)
             self.cursor.execute(sql)
+            res = self._create_profile(customer_id)
+            if res != ReturnStatus.OK:
+                return res
             self.myconn.commit()
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
-        return ReturnStatus.OK
+        return customer_id
 
     # B login history
     # B.1 history record
@@ -388,7 +391,8 @@ class WeConnect:
                             name=None, gender=None, birthday=None, email=None, pic=None, welcome_msg=None, is_public=is_public)
 
     # A.5 Create User Profile
-    def create_profile(self, customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, welcome_msg:str=None, is_public:bool=None) -> int:
+    # private method
+    def _create_profile(self, customer_id: int, name:str=None, gender:str=None, birthday:str=None, email:str=None, pic:str=None, welcome_msg:str=None, is_public:bool=0) -> int:
         """
         Create user profile
         Args:
@@ -409,7 +413,7 @@ class WeConnect:
             entry = Util.fitArray(entry)
             sql = "INSERT INTO Profile (`profile_id`, `customer_id`, `name`, `gender`, `birthday`, `email`, `pic`, `welcome_msg`, `is_public`) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {});".format(*entry)
             self.cursor.execute(sql)
-            self.myconn.commit()
+            # self.myconn.commit()
         except BaseException:
             return ReturnStatus.DATABASE_ERROR
         return ReturnStatus.OK
