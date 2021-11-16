@@ -88,6 +88,10 @@ class Util:
     @staticmethod
     def isNotNone(input):
         return not Util.isNone(input)
+    
+    @staticmethod
+    def isValidResult(input):
+        return Util.isNotNone(input) and not ReturnStatus.isAStatus(input)
 
     @staticmethod
     def whereBuild(conditionDict: dict) -> str:
@@ -374,7 +378,7 @@ class WeConnect:
         """
         original = self.read_profile(customer_id)
         if original is None:
-            return False
+            return ReturnStatus.DATA_NOT_EXISTING
         update = [name, gender, birthday, email, pic, welcome_msg, is_public]
         original = Util.updateArray(original, update)
         original = Util.fitArray(original)
