@@ -53,6 +53,7 @@ class signin_PasswordWindow(QWidget, Ui_signin_Password):
         #print(signin_username, signin_password, tmp)
         if tmp > 0:
             customer_InfoWindow.customer_id = tmp
+            demo.create_history(tmp)
             customer_InfoWindow.initUi() #update
             customer_InfoWindow.addButton()
             customer_InfoWindow.show()
@@ -82,6 +83,7 @@ class signupWindow(QWidget, Ui_signup):
             print(tmp)
             if tmp > 0:
                 customer_InfoWindow.customer_id = tmp
+                demo.create_history(tmp)
                 customer_InfoWindow.initUi()
                 customer_InfoWindow.addButton()
                 customer_InfoWindow.show()
@@ -134,15 +136,17 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
 
         self.pushButton.clicked.connect(lambda: self.profile_edit())
 
-        self.btns = []
-
 
     def addButton(self):
-        for i in range(5):
+        account_list = demo.get_account_info(self.customer_id)
+        self.btns = []
+        print(account_list)
+        for i in range(len(account_list)):
+            current_account = account_list[i]
             self.btns.append( QtWidgets.QPushButton(self.verticalLayoutWidget))
-            self.btns[i].setText(str(i))
+            self.btns[i].setText("Account ID: " + str(current_account[2]))
             self.verticalLayout.addWidget((self.btns[i]))
-            #print(self.btns[i].text())
+            #self.btns[i].clicked.connect(lambda: self.account_Info(self.sender().text()))
             self.btns[i].clicked.connect(lambda: self.account_Info(self.sender().text()))
 
     def profile_edit(self):
@@ -150,7 +154,7 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
         profile_editWindow.show()
 
     def account_Info(self, id):
-        account_InfoWindow.account_id = id
+        account_InfoWindow.account_id = int(id.strip("Account ID: "))
         account_InfoWindow.update()
         # print(account_InfoWindow.account_id)
         account_InfoWindow.show()
