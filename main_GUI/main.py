@@ -376,6 +376,7 @@ class account_InfoWindow(QMainWindow, Ui_account_Info):
             self.label_9.setText("Please enter a number as an account id")
     def DeleteOnClicked(self):
         demo.delete_account(self.customer_id, self.account_id)
+        customer_InfoWindow.initUi()
     def TransactOnClicked(self):
         if (self.lineEdit_6.text().isdigit()&self.lineEdit_7.text().isdigit()&self.lineEdit_8.text().isdigit()):
             from_account=int(self.lineEdit_6.text())
