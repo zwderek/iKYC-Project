@@ -27,11 +27,13 @@ SOURCE mytable.sql
 ```
 
 #### Change MySQL Connector Username, Password, and Database
-Go to /main_GUI/funcitons.py, at line 209:
+Go to /main_GUI/funcitons.py, at the top:
 ```Python
-self.myconn = mysql.connector.connect(host="localhost", user="root", password="zwd1025nydzd", database="facerecognition")
+user = ""
+password = ""
+database = ""
 ```
-Change the user, password, and database to your user, password, and database.
+Please change the user, password, database to the `username`, `password` you login to setup database and change `database` to the database you have created before. So it means you can create database name based on your preference.
 
 #### Import Test Data (Optional)
 After setup schema, you can use this system but need to sign up first as there's no user. To facilitate your usage, we provide some sample data in directory TestData:
