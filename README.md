@@ -2,7 +2,9 @@
 An Intelligent Know Your Customer (iKYC) system with facial ID login function by COMP3278 Group 22
 
 ## How to use
-Switch to folder directly containing this file as working directory
+Switch to folder directly containing this file as working directory.
+
+Please avoid M1 Mac as PyQt5 is not supported :(
 ### Install Requirements
 All requirements are listed in Requirements.txt, note that it's different from provided, with specific version provided, open the shell and type:
 ```bash
@@ -54,10 +56,14 @@ After import test data, two test account are available:
 ### Start the program
 Entrance of program is `main.py` under folder `main_GUI`, so open the console and type:
 ```Python
-python main_GUI/main.py
+cd main_GUI
+
+python main.py
 ```
 
-or `python3 main_GUI/main.py` for macOs users.
+or `python3 main.py` for macOs users.
+
+Please change directory to `main_GUI` before running as `os.mkdir` usually cause bug if path doesn't match.
 
 #### When you first entry the program
 Though not requried, you're strongly recommended to register yourself, including username, password, and your face id!
