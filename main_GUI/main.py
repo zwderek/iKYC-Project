@@ -318,23 +318,23 @@ if __name__ == '__main__':
     profile_editWindow = profile_editWindow()
     account_InfoWindow = account_InfoWindow()
 
-    loginWindow.setStyleSheet("#MainWindow{background-color: white}")
-    loginWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    loginWindow.setStyleSheet("#MainWindow{background-color: rgb(53,53,53)}")
+    loginWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
-    customer_InfoWindow.setStyleSheet("#Form{background-color: white}")
-    customer_InfoWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    customer_InfoWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
+    customer_InfoWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
-    signin_FaceIDWindow.setStyleSheet("#Form{background-color: white}")
-    signin_FaceIDWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    signin_FaceIDWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
+    signin_FaceIDWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
-    signin_PasswordWindow.setStyleSheet("#Form{background-color: white}")
-    signin_PasswordWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    signin_PasswordWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
+    signin_PasswordWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
-    signupWindow.setStyleSheet("#Form{background-color: white}")
-    signupWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    signupWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
+    signupWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
-    profile_editWindow.setStyleSheet("#Form{background-color: white}")
-    profile_editWindow.setWindowIcon(QtGui.QIcon("icon.png"))
+    profile_editWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
+    profile_editWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
 
 
     loginWindow.show()
