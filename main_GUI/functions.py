@@ -3,6 +3,9 @@ from datetime import datetime
 
 from mysql.connector import utils
 
+user = "root"
+password = "zwd1025nydzd"
+database = "facerecognition"
 
 class Util:
     """
@@ -206,7 +209,7 @@ class ReturnStatus:
 class WeConnect:
     def __init__(self) -> None:
         # 0 Create database connection
-        self.myconn = mysql.connector.connect(host="localhost", user="root", password="zwd1025nydzd", database="facerecognition")
+        self.myconn = mysql.connector.connect(host="localhost", user=user, password=password, database=database)
         # self.myconn = mysql.connector.connect(host="localhost", user="root", password="", database="facerecognition")
         self.date = datetime.utcnow()
         self.now = datetime.now()
