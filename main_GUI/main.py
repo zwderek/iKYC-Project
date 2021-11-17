@@ -435,7 +435,7 @@ if __name__ == '__main__':
 
     profile_editWindow.setStyleSheet("#Form{background-color: #e0ebeb}")
     profile_editWindow.setWindowIcon(QtGui.QIcon("icon_wihte.png"))
-
+    account_InfoWindow.setStyleSheet("#MainWindow{background-color:white}")
 
     loginWindow.show()
 
