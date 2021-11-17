@@ -18,8 +18,8 @@ class Ui_login(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(70, 50, 591, 211))
-        self.label.setPixmap(QtGui.QPixmap(":/pics/pic/piccc.png"))
+        self.label.setGeometry(QtCore.QRect(200, 0, 341, 311))
+        self.label.setPixmap(QtGui.QPixmap(":/pics/pic/login.png"))
         self.label.setScaledContents(True)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setIndent(-1)
@@ -53,7 +53,7 @@ class Ui_login(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "iKYC"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Login"))
         self.pushButton.setText(_translate("MainWindow", "Sign in with Face ID"))
         self.pushButton_2.setText(_translate("MainWindow", "Sign in with Password"))
         self.pushButton_3.setText(_translate("MainWindow", "Sign up"))

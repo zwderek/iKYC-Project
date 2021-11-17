@@ -14,10 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_signup(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(732, 549)
+        Form.resize(711, 733)
         self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(90, 40, 551, 451))
+        self.groupBox.setGeometry(QtCore.QRect(80, 50, 551, 611))
         self.groupBox.setTitle("")
+        self.groupBox.setFlat(False)
         self.groupBox.setObjectName("groupBox")
         self.lineEdit = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit.setGeometry(QtCore.QRect(0, 30, 551, 41))
@@ -29,7 +30,7 @@ class Ui_signup(object):
         self.lineEdit_3.setGeometry(QtCore.QRect(0, 280, 551, 41))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton.setGeometry(QtCore.QRect(0, 400, 551, 51))
+        self.pushButton.setGeometry(QtCore.QRect(0, 560, 551, 51))
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(self.groupBox)
         self.label.setGeometry(QtCore.QRect(0, 0, 151, 31))
@@ -38,16 +39,25 @@ class Ui_signup(object):
         self.label_2.setGeometry(QtCore.QRect(0, 120, 151, 31))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setGeometry(QtCore.QRect(0, 250, 151, 31))
+        self.label_3.setGeometry(QtCore.QRect(0, 250, 311, 31))
         self.label_3.setObjectName("label_3")
+        self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
+        self.textBrowser.setGeometry(QtCore.QRect(0, 360, 551, 161))
+        self.textBrowser.setObjectName("textBrowser")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Sign up"))
+        Form.setWindowTitle(_translate("Form", "Signup"))
         self.pushButton.setText(_translate("Form", "Sign Up"))
         self.label.setText(_translate("Form", "Username"))
         self.label_2.setText(_translate("Form", "Password"))
         self.label_3.setText(_translate("Form", "Repeat Password"))
+        self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Plaese look at your camera.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Your </span><span style=\" font-size:8pt; font-weight:600;\">FaceID</span><span style=\" font-size:8pt;\"> will be generated automatically after you click the button</span></p></body></html>"))
