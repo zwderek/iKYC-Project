@@ -197,7 +197,7 @@ class customer_InfoWindow(QWidget, Ui_customer_Info):
     def addButton(self):
         account_list = demo.get_account_info(self.customer_id)
         self.btns = []
-        print(account_list)
+        #print(account_list)
         for i in range(len(account_list)):
             current_account = account_list[i]
             self.btns.append( QtWidgets.QPushButton(self.verticalLayoutWidget))
