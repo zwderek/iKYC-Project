@@ -4,7 +4,7 @@ from datetime import datetime
 from mysql.connector import utils
 
 user = "root"
-password = "zwd1025nydzd"
+password = ""
 database = "facerecognition"
 
 class Util:
