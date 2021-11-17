@@ -250,51 +250,151 @@ class profile_editWindow(QWidget, Ui_profile_edit):
 
 
 class account_InfoWindow(QMainWindow, Ui_account_Info):
-    customer_id = -1
     account_id = -1
+    customer_id = -1
+    type = ''
+    currency = ''
+    balance = -1
+
+
+
+
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(lambda: self.SearchOnClicked())
         self.pushButton_2.clicked.connect(lambda: self.DeleteOnClicked())
+        self.pushButton_3.clicked.connect(lambda: self.TransactOnClicked())
+        self.spinBox.setMaximum(100000000)
+        self.spinBox_2.setMaximum(100000000)
 
     def update(self):
+        self.lineEdit.setText('')
+        self.lineEdit_2.setText('')
+        self.lineEdit_3.setText('')
+        self.lineEdit_4.setText('')
+        self.lineEdit_5.setText('')
+        self.lineEdit_6.setText('')
+        self.lineEdit_7.setText('')
+        self.lineEdit_8.setText('')
+        self.lineEdit_9.setText('')
+        self.label_9.setText("")
+        self.label_14.setText("")
+        self.checkBox.setCheckState(False)
+        self.checkBox_2.setCheckState(False)
+        self.checkBox_3.setCheckState(False)
+        self.checkBox_4.setCheckState(False)
+        self.spinBox.setValue(0)
+        self.spinBox_2.setValue(0)
+        self.tableWidget.setColumnCount(5)
+        account_info=demo.get_account_info(self.customer_id)
+        for i in account_info:
+            if (i[2]==self.account_id):
+                self.type=i[0]
+                self.currency=i[1]
+                self.balance=i[3]
         account_InfoWindow.lineEdit.setText(str(self.account_id))
         # fill in account_id
-        account_InfoWindow.lineEdit_2.setText(str(self.account_id))
+        account_InfoWindow.lineEdit_2.setText(str(self.customer_id))
         # fill in customer_id
-        account_InfoWindow.lineEdit_3.setText(str(self.account_id))
+        account_InfoWindow.lineEdit_3.setText(str(self.type))
         # fill in type
-        account_InfoWindow.lineEdit_4.setText(str(self.account_id))
+        account_InfoWindow.lineEdit_4.setText(str(self.currency))
         # fill in currency
-        account_InfoWindow.lineEdit_5.setText(str(self.account_id))
+        account_InfoWindow.lineEdit_5.setText(str(self.balance))
         # fill in balance
+        account_InfoWindow.lineEdit_6.setText(str(self.account_id))
+        #from_account in make_transaction
         account_InfoWindow.lineEdit.setReadOnly(True)
         account_InfoWindow.lineEdit_2.setReadOnly(True)
         account_InfoWindow.lineEdit_3.setReadOnly(True)
         account_InfoWindow.lineEdit_4.setReadOnly(True)
         account_InfoWindow.lineEdit_5.setReadOnly(True)
+        account_InfoWindow.lineEdit_6.setReadOnly(True)
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setEnabled(False)
+        if (self.balance!=0):
+            account_InfoWindow.pushButton_2.setEnabled(False)
+        # delete account will be disabled when balance != 0
 
-        account_InfoWindow.pushButton_2.setEnabled(True)
-        #if account 里有钱:
-        account_InfoWindow.pushButton_2.setEnabled(False)
-        # delete account
+        #test part
+
+        #test part
+
     def SearchOnClicked(self):
-        month=self.comboBox.currentText()
-        day=self.comboBox_2.currentText()
-        time=self.comboBox_3.currentText()
-        amount=self.comboBox_4.currentText()
-        self.Search(month,day,time,amount)
+        valid=True
+        self_id=self.account_id
+        if(self.checkBox_4.isChecked()):
+            if(self.lineEdit_9.text().isdigit()):
+                target_id=int(self.lineEdit_9.text())
+            else:
+                target_id=None
+                valid=False
+        else:
+            target_id=None
+        if(self.checkBox.isChecked()):
+            date_left=self.dateTimeEdit.date().toString(QtCore.Qt.ISODate)
+            time_left=self.dateTimeEdit.time().toString(QtCore.Qt.ISODate)
+        else:
+            date_left=None
+            time_left=None
+        if(self.checkBox_2.isChecked()):
+            date_right=self.dateTimeEdit_2.date().toString(QtCore.Qt.ISODate)
+            time_right=self.dateTimeEdit_2.time().toString(QtCore.Qt.ISODate)
+        else:
+            date_right=None
+            time_right=None
+        if(self.checkBox_3.isChecked()):
+            amount_low=self.spinBox.value()
+            amount_high=self.spinBox_2.value()
+        else:
+            amount_low=None
+            amount_high=None
+        if(valid):
+            search_result_1=demo.search_transaction(from_account_id=self_id, to_account_id=target_id, date_left=date_left, date_right=date_right, time_left=time_left, time_right=time_right, amount_low=amount_low, amount_high=amount_high)
+            search_result_2=demo.search_transaction(from_account_id=target_id, to_account_id=self_id, date_left=date_left, date_right=date_right, time_left=time_left, time_right=time_right, amount_low=amount_low, amount_high=amount_high)
+            search_result=search_result_1+search_result_2
+            self.tableWidget.setRowCount(len(search_result))
+            for i in range(len(search_result)):
+                item = QtWidgets.QTableWidgetItem()
+                self.tableWidget.setVerticalHeaderItem(i, item)
+                self.tableWidget.verticalHeaderItem(i).setText('')
+                for j in range(5):
+                    k=j
+                    if(j==2):
+                        k=3
+                    elif(j==3):
+                        k=2
+                    item = QtWidgets.QTableWidgetItem()
+                    self.tableWidget.setItem(i,j,item)
+                    self.tableWidget.item(i,j).setText(str(search_result[i][k]))
+                    #self.tableWidget.setItem(i, column, item)
+
+            self.label_9.setText("")
+        else:
+            self.label_9.setText("Please enter a number as an account id")
     def DeleteOnClicked(self):
-        print("delete")
-    def Search(self,month,day,time,amount):
-        print("search for it")
-        print(month)
-        print(day)
-        print(time)
-        print(amount)
-        #不知道search函数最后怎么call，就先写成这样
+        demo.delete_account(self.customer_id, self.account_id)
+    def TransactOnClicked(self):
+        if (self.lineEdit_6.text().isdigit()&self.lineEdit_7.text().isdigit()&self.lineEdit_8.text().isdigit()):
+            from_account=int(self.lineEdit_6.text())
+            to_account=int(self.lineEdit_7.text())
+            amount=int(self.lineEdit_8.text())
+            transaction_result=demo.make_transaction(from_account, to_account, amount)
+            if (transaction_result==returnstatus.ACCOUNT_ERROR.AMOUNT_SHORT):
+                self.label_14.setText("Please enter a smaller amount")
+            elif (transaction_result==returnstatus.DATABASE_ERROR):
+                self.label_14.setText("Database error")
+            elif (transaction_result==returnstatus.OK):
+                self.label_14.setText("")
+
+        else:
+            self.label_14.setText("Please enter a number")
+
+
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
